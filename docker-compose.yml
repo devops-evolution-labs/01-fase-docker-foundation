@@ -1,0 +1,104 @@
+
+services:
+
+  #frontend
+  dashboard:
+    build: ./dashboard
+    container_name: dashboard
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./dashboard:/app
+      # Preserve container's node_modules (Linux binaries) — prevents Windows host
+      # node_modules from overwriting platform-specific native bindings (rolldown/vite 8)
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - devops-network
+
+    #backend
+  nginx:
+    image: nginx:latest
+    container_name: nginx-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - devops-network
+
+  api:
+    build: ./api
+    container_name: api-service
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  worker:
+    build: ./worker
+    container_name: worker-service
+    environment:
+      REDIS_HOST: redis
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - devops-network
+
+  redis:
+    image: redis:7
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: devops
+      POSTGRES_PASSWORD: devops
+      POSTGRES_DB: appdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - devops-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devops -d appdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  devops-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

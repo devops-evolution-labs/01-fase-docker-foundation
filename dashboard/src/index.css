@@ -1,0 +1,435 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #080808;
+  --bg-surface:   #0e0e0e;
+  --bg-card:      #111111;
+  --bg-card-alt:  #141414;
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-blue:  rgba(37, 99, 235, 0.55);
+  --border-hover: rgba(255, 255, 255, 0.14);
+
+  --text:         #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted:   #555560;
+
+  --accent:       #2563eb;
+  --accent-light: #3b82f6;
+  --accent-dim:   rgba(37, 99, 235, 0.12);
+
+  --green:        #22c55e;
+  --red:          #ef4444;
+  --yellow:       #f59e0b;
+
+  --radius:       4px;
+  --font:         ui-monospace, 'Cascadia Code', 'Fira Code', Consolas, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Dashboard ── */
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.phase-badge {
+  color: var(--accent-light);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-blue);
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  background: var(--accent-dim);
+}
+
+.dashboard-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.dashboard-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.author-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.author-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.author-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.health-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.health-count {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.health-count.all-healthy { color: var(--green); }
+.health-count.partial      { color: var(--yellow); }
+
+.health-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Main ── */
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);  /* gaps between sections look like dividers */
+}
+
+/* ── Section ── */
+.section {
+  background: var(--bg);
+  padding: 32px 40px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+/* Section labels — matches "PROFESSIONAL JOURNEY", "TECHNICAL EXPERTISE" from portfolio */
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.last-poll {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.polling-badge {
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.05em;
+}
+
+/* ── Services Grid ── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+/* ── Service Card — matches portfolio skill cards ── */
+.service-card {
+  padding: 20px 24px;
+  background: var(--bg-card);
+  transition: background 0.2s;
+}
+
+.service-card:hover {
+  background: var(--bg-card-alt);
+}
+
+/* active blue border on healthy (like highlighted cert card) */
+.service-card.healthy   { border-top: 2px solid var(--green); }
+.service-card.unhealthy { border-top: 2px solid var(--red); }
+.service-card.pending   { border-top: 2px solid var(--text-muted); }
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.service-type {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-light);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-healthy   { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+.dot-unhealthy { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+.dot-pending   { background: var(--text-muted); animation: blink 1.5s infinite; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+.service-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+.service-description {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.service-port {
+  font-size: 12px;
+  color: var(--accent-light);
+  letter-spacing: 0.04em;
+}
+
+/* ── Architecture — horizontal ── */
+.arch-section {
+  background: var(--bg);
+  padding: 32px 40px;
+}
+
+/* horizontal flow row */
+.arch-diagram-h {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+/* matches portfolio skill card style */
+.arch-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 130px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s;
+}
+
+.arch-node.external { border-color: var(--border); color: var(--text-secondary); }
+.arch-node.gateway  { border-color: var(--border-blue); background: var(--accent-dim); color: var(--accent-light); }
+.arch-node.app      { border-color: rgba(34, 197, 94, 0.3); }
+.arch-node.infra    { border-color: rgba(245, 158, 11, 0.25); }
+
+.arch-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.arch-label {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.arch-arrow-h {
+  font-size: 18px;
+  color: var(--accent);
+  padding: 0 10px;
+  line-height: 1;
+}
+
+.arch-arrow-v {
+  font-size: 16px;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.arch-fork-h {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arch-branch-h {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arch-network {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* matches portfolio tag style (AWS, Terraform, Docker...) */
+.network-badge {
+  font-size: 11px;
+  color: var(--accent-light);
+  border: 1px solid var(--border-blue);
+  background: var(--accent-dim);
+  padding: 4px 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── Metrics ── */
+.metrics-legend {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.legend-item {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.legend-item.green { color: var(--green); }
+.legend-item.blue  { color: var(--accent-light); }
+
+.metrics-chart { width: 100%; }
+
+.empty-chart {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 48px 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chart-tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.tooltip-time {
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+}
+
+/* ── Infrastructure Stack — rodapé ── */
+.stack-footer {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+}
+
+.stack-footer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 16px 28px;
+  border-right: 1px solid var(--border);
+}
+
+.stack-footer-item:last-child {
+  border-right: none;
+}
+
+.stack-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.stack-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
